@@ -1,23 +1,20 @@
 package cft.commons.core.util;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,46 +29,46 @@ public class HttpClientUtils {
 
 	private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 
-	public static String httpGet(String apiUrl, int cTimeout, int sTimeout) {
+	public static String httpGet(String url, int cTimeout, int sTimeout) throws IOException {
 
-		HttpParams params = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(params, cTimeout);
-		HttpConnectionParams.setSoTimeout(params, sTimeout);
-		HttpClient httpClient = new DefaultHttpClient(params);
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(sTimeout).setConnectTimeout(cTimeout).build();
+		CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
 
+		CloseableHttpResponse response = null;
 		String responseBody = null;
 
 		try {
-			HttpGet httpGet = new HttpGet(apiUrl);
+
+			HttpGet httpGet = new HttpGet(url);
 			httpGet.addHeader("Accept-Charset", Constants.ENCODING_UTF8);
 
-			HttpResponse response = httpClient.execute(httpGet);
+			response = httpClient.execute(httpGet);
 			HttpEntity entity = response.getEntity();
 
-			logger.info("HttpClientUtils:httpGet:response statusCode = " + response.getStatusLine().getStatusCode());
+			int statusCode = response.getStatusLine().getStatusCode();
+			logger.info("HttpClientUtils:httpGet:response statusCode = " + statusCode);
 
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK && entity != null) {
+			if (statusCode < 400 && entity != null) {
 				responseBody = EntityUtils.toString(entity, Constants.ENCODING_UTF8);
 			}
 
-			httpGet.abort();
 		} catch (Exception ex) {
 			logger.error("Exception during Http Get: ", ex);
 		} finally {
-			httpClient.getConnectionManager().shutdown();
+			response.close();
+			httpClient.close();
 		}
 
 		return responseBody;
 	}
 
 	public static String httpPost(Map<String, String> nvpMap, String requestUrl, int cTimeout, int sTimeout)
-			throws HttpException {
+			throws IOException {
 
-		HttpParams params = new BasicHttpParams();
-		HttpConnectionParams.setConnectionTimeout(params, cTimeout);
-		HttpConnectionParams.setSoTimeout(params, sTimeout);
-		HttpClient httpClient = new DefaultHttpClient(params);
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(sTimeout).setConnectTimeout(cTimeout).build();
+		CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
 
+		CloseableHttpResponse response = null;
 		String responseBody = null;
 
 		try {
@@ -91,20 +88,21 @@ public class HttpClientUtils {
 
 			httpPost.setEntity(new UrlEncodedFormEntity(nvps, Constants.ENCODING_UTF8));
 
-			HttpResponse response = httpClient.execute(httpPost);
+			response = httpClient.execute(httpPost);
 			HttpEntity entity = response.getEntity();
 
-			logger.info("HttpClientUtils:httpPostXML:response statusCode = " + response.getStatusLine().getStatusCode());
+			int statusCode = response.getStatusLine().getStatusCode();
+			logger.info("HttpClientUtils:httpPost:response statusCode = " + statusCode);
 
-			if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK && entity != null) {
+			if (statusCode < 400 && entity != null) {
 				responseBody = EntityUtils.toString(entity, Constants.ENCODING_UTF8);
 			}
 
-			httpPost.abort();
 		} catch (Exception ex) {
-			logger.error("Exception during Http Get: ", ex);
+			logger.error("Exception during Http Post: ", ex);
 		} finally {
-			httpClient.getConnectionManager().shutdown();
+			response.close();
+			httpClient.close();
 		}
 
 		return responseBody;
