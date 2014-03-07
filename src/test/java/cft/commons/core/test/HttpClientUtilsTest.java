@@ -14,7 +14,7 @@ import cft.commons.core.util.HttpClientUtils;
  */
 public class HttpClientUtilsTest {
 
-	//@Test
+	@Test
 	public void httpGet() throws IOException {
 			System.out.println("Content = " + HttpClientUtils.httpGet("http://www.baidu.com", 3000, 5000));
 	}

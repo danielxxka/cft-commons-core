@@ -62,7 +62,7 @@ public class HttpClientUtils {
 		return responseBody;
 	}
 
-	public static String httpPost(Map<String, String> nvpMap, String requestUrl, int cTimeout, int sTimeout)
+	public static String httpPost(Map<String, String> nvpMap, String url, int cTimeout, int sTimeout)
 			throws IOException {
 
 		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(sTimeout).setConnectTimeout(cTimeout).build();
@@ -73,7 +73,7 @@ public class HttpClientUtils {
 
 		try {
 
-			HttpPost httpPost = new HttpPost(requestUrl);
+			HttpPost httpPost = new HttpPost(url);
 
 			//Set Proxy
 			/*			HttpHost hcProxyHost = new HttpHost("proxy.pccw.com", 8080, "http");
