@@ -10,19 +10,37 @@ import org.apache.commons.lang.builder.ToStringStyle;
  * @author daniel
  *
  */
-public class PaginationObject implements Serializable {
+public class JqPageObject implements Serializable {
 
 	private static final long serialVersionUID = 6966849468572180581L;
 
-	private String total;
-	private List<?> rows;
+	private int page;     //page no.
+	private int total;    //total page count 
+	private List<?> rows; //records list
+	private int records;  //total record count
 
-	public String getTotal() {
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+	public int getTotal() {
 		return total;
 	}
 
-	public void setTotal(String total) {
+	public void setTotal(int total) {
 		this.total = total;
+	}
+
+	public int getRecords() {
+		return records;
+	}
+
+	public void setRecords(int records) {
+		this.records = records;
 	}
 
 	public List<?> getRows() {

@@ -1,4 +1,4 @@
-package cft.commons.core.util;
+package cft.commons.core.helper.pagination;
 
 import java.util.ArrayList;
 import java.util.List;

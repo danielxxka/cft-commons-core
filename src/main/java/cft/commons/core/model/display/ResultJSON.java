@@ -15,8 +15,9 @@ public class ResultJSON implements Serializable {
 
 	private Boolean success = false;
 	private String resultCode;
-	private String message;
 	private Object dataObject;
+	private String message;
+	private String exceptionMsg;
 
 	public Boolean getSuccess() {
 		return success;
@@ -48,6 +49,14 @@ public class ResultJSON implements Serializable {
 
 	public void setResultCode(String resultCode) {
 		this.resultCode = resultCode;
+	}
+
+	public String getExceptionMsg() {
+		return exceptionMsg;
+	}
+
+	public void setExceptionMsg(String exceptionMsg) {
+		this.exceptionMsg = exceptionMsg;
 	}
 
 	@Override
