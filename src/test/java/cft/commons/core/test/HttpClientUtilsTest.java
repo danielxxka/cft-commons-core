@@ -29,8 +29,16 @@ public class HttpClientUtilsTest {
 		map.put("xml", xmlString);
 		map.put("deviceToken", "@#%@#^@!#^@!#!%%!");
 		map.put("createDate", "2013-10-01 11:23:00");
+		
+		String resp = null;
+		try{
+			resp = HttpClientUtils.httpPost(map, "http://localhost/api/test", 2000, 5000);
+		}catch(Exception ex){
+			resp = ex.getMessage();
+			ex.printStackTrace();
+		}
 
-		System.out.println(HttpClientUtils.httpPost(map, "http://localhost/api/test", 2000, 5000));
+		System.out.println(resp);
 
 	}
 }
