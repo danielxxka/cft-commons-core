@@ -5,13 +5,10 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
-import org.codehaus.jackson.annotate.JsonPropertyOrder;
-import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import cft.commons.core.helper.jackson.JsonDateTimeDeserializer;
-import cft.commons.core.helper.jackson.JsonDateTimeSerializer;
 import cft.commons.core.helper.xstream.XStreamDateTimeConverter;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 
@@ -20,7 +17,7 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
  *
  */
 
-@JsonPropertyOrder(alphabetic= false)
+@JsonPropertyOrder(alphabetic = false)
 @XStreamAlias("member")
 public class Member implements Serializable {
 
@@ -32,9 +29,7 @@ public class Member implements Serializable {
 	@XStreamAlias("password")
 	private String password;
 
-	@JsonSerialize(using= JsonDateTimeSerializer.class,include=JsonSerialize.Inclusion.NON_NULL)
-	@JsonDeserialize(using= JsonDateTimeDeserializer.class)
-	@XStreamConverter(value =  XStreamDateTimeConverter.class, strings={"yyyy-MM-dd'T'HH:mm:ss"})
+	@XStreamConverter(value = XStreamDateTimeConverter.class, strings = { "yyyy-MM-dd'T'HH:mm:ss" })
 	@XStreamAlias("birthday")
 	private Date birthday;
 
@@ -56,8 +51,6 @@ public class Member implements Serializable {
 		this.salary = salary;
 		this.active = active;
 	}
-	
-	
 
 	public String getName() {
 		return name;
