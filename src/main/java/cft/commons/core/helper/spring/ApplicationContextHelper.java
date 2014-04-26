@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContextAware;
  * 
  */
 public class ApplicationContextHelper implements ApplicationContextAware {
-	private static ApplicationContext appCtx;
+	public static ApplicationContext appCtx;
 
 	/** 
 	 * IOC the ApplicationContext object   

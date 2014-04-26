@@ -8,8 +8,8 @@ public class IdentityUtilsTest {
 
 	@Test
 	public void testUuid() {
-		//System.out.println(IdentityUtils.uuid());
-		//System.out.println(IdentityUtils.uuid2());
+		System.out.println(IdentityUtils.uuid());
+		System.out.println(IdentityUtils.uuid2());
 
 		for (int i = 1; i <= 10; i++) {
 			System.out.println(IdentityUtils.randomLong());
