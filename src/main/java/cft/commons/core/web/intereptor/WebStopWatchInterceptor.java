@@ -16,11 +16,11 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  */
 public class WebStopWatchInterceptor extends HandlerInterceptorAdapter {
 
-	private static final Logger logger = LoggerFactory.getLogger(WebStopWatchInterceptor.class);
+	//private static final Logger logger = LoggerFactory.getLogger(WebStopWatchInterceptor.class);
 
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-		StopWatch stopWatch = new Slf4JStopWatch(request.getRequestURI());
+		StopWatch stopWatch = new Slf4JStopWatch("controllerlog:"+request.getRequestURI());
 		request.setAttribute("stopWatch", stopWatch);
 		return true;
 	}
@@ -31,8 +31,7 @@ public class WebStopWatchInterceptor extends HandlerInterceptorAdapter {
 		StopWatch stopWatch = (StopWatch) request.getAttribute("stopWatch");
 		stopWatch.stop();
 
-		logger.info("WebStopWatchInterceptor: URI = {}, handlingTime = {} ms",
-				new Object[] { request.getRequestURI(), stopWatch.getElapsedTime() });
+		//logger.info("WebStopWatchInterceptor: URI = {}, handlingTime = {} ms",new Object[] { request.getRequestURI(), stopWatch.getElapsedTime() });
 
 	}
 }

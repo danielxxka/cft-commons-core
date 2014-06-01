@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 
-import cft.commons.core.cache.CacheKeyGenerator;
-import cft.commons.core.constant.Constants;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 
@@ -15,7 +13,9 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-import org.springframework.util.StopWatch;
+
+import cft.commons.core.cache.CacheKeyGenerator;
+import cft.commons.core.constant.Constants;
 
 /**
  * 使用Spring MethodInterceptor的AOP 形式嵌入Ehcache memory cache layer
@@ -45,16 +45,6 @@ public class EhcacheCacheInterceptor implements MethodInterceptor {
 
 		final String cacheKey = cacheKeyGenerator.getCacheKey(cacheKeyPrefix, className, methodName, arguments);
 
-		//Generate FunctionName and stopWatch for function enter log
-		StringBuffer logBody = new StringBuffer();
-		logBody.append(Constants.CACHE_LOG);
-
-		StopWatch stopWatch = new StopWatch();
-		stopWatch.start();
-
-		logBody.append(cacheKey);
-		logger.debug(logBody + " ------> Start");
-
 		//Trigger function business logic 
 		Object result = null;
 		Element element = null;
@@ -64,37 +54,23 @@ public class EhcacheCacheInterceptor implements MethodInterceptor {
 			element = cache.get(cacheKey);
 
 			if (element != null) {
-
-				stopWatch.stop();
 				logger.debug(Constants.CACHE_LOG + "Get cached data by cacheKey:[{}] ", cacheKey);
-
 			} else {
-
-				logger.info(Constants.CACHE_LOG + "CACHE NOT EXIST,RETRIEVED DATA FROM DAO, cacheKey:[{}]", cacheKey);
+				logger.info(Constants.CACHE_LOG + "CACHE NOT EXIST,TRIGGER ORIGINAL DATA SERVICE, cacheKey:[{}]", cacheKey);
 				result = invocation.proceed();
 				element = new Element(cacheKey, (Serializable) result);
 				cache.put(element);
 
-				stopWatch.stop();
 				logger.info(Constants.CACHE_LOG + "PUT DATA INTO CACHE, cacheKey:[{}]", cacheKey);
 			}
 		}
 
-		//Debug log for cache monitoring
-		logger.debug(Constants.CACHE_LOG + "[{}].getMemoryStoreSize():{} ", cache.getName(), cache.getMemoryStoreSize());
-
 		/**
 		 * Warning:This cache.calculateInMemorySize() method can be very expensive to run.
 		 */
-		/*			logger.debug(MessageFormat.format(Constants.CACHE_LOG + "[{0}].calculateInMemorySize():{1} ",
+		/*logger.debug(Constants.CACHE_LOG + "[{}].getMemoryStoreSize():{} ", cache.getName(), cache.getMemoryStoreSize());
+		 logger.debug(MessageFormat.format(Constants.CACHE_LOG + "[{0}].calculateInMemorySize():{1} ",
 							cache.getName(), cache.calculateInMemorySize()));*/
-
-		//Generate Function end log
-		logBody.append(" ------> End");
-		logBody.append(" ,execution time: ");
-		logBody.append(stopWatch.getTotalTimeMillis());
-		logBody.append(" ms");
-		logger.info(logBody.toString());
 
 		return element.getObjectValue();
 	}
@@ -115,5 +91,5 @@ public class EhcacheCacheInterceptor implements MethodInterceptor {
 	public void setCacheKeyGenerator(CacheKeyGenerator cacheKeyGenerator) {
 		this.cacheKeyGenerator = cacheKeyGenerator;
 	}
-	
+
 }
