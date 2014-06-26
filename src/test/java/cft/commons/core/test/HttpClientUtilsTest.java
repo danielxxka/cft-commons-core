@@ -16,7 +16,7 @@ public class HttpClientUtilsTest {
 
 	@Test
 	public void httpGet() throws IOException {
-			System.out.println("Content = " + HttpClientUtils.httpGet("http://www.baidu.com", 3000, 5000));
+			System.out.println("Content = " + HttpClientUtils.httpGet("http://www.baidu.com", 2000, 3000));
 	}
 
 	@Test

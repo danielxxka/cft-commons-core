@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 
 /**
  * 简单封装Jackson，实现JSON String<->Java Object的Mapper.
@@ -156,15 +155,6 @@ public class JsonMapper {
 	public void enableEnumUseToString() {
 		mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
 		mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
-	}
-
-	/**
-	 * 支持使用Jaxb的Annotation，使得POJO上的annotation不用与Jackson耦合。
-	 * 默认会先查找jaxb的annotation，如果找不到再找jackson的。
-	 */
-	public void enableJaxbAnnotation() {
-		JaxbAnnotationModule module = new JaxbAnnotationModule();
-		mapper.registerModule(module);
 	}
 
 	/**

@@ -161,18 +161,6 @@ public class JsonMapperTest {
 		assertThat(mapper.toJson(testBean)).isEqualTo("{\"productName\":\"foo\",\"id\":1}");
 	}
 
-	/*
-	 * 测试直接使用Jaxb的annotaion
-	 */
-	@Test
-	public void jaxbAnnoation() {
-		JsonMapper newMapper = new JsonMapper();
-		newMapper.enableJaxbAnnotation();
-		TestBean3 testBean = new TestBean3(1, "foo", 18);
-		// 结果name属性输出在前，且被改名为productName，且age属性被ignore
-		assertThat(newMapper.toJson(testBean)).isEqualTo("{\"productName\":\"foo\",\"id\":1}");
-	}
-
 	// 调转顺序
 	@JsonPropertyOrder({ "name", "id" })
 	public static class TestBean2 {
@@ -197,29 +185,6 @@ public class JsonMapperTest {
 
 	}
 
-	// 调转顺序
-	@XmlType(propOrder = { "name", "id" })
-	public static class TestBean3 {
-
-		public long id;
-
-		@XmlElement(name = "productName")
-		public String name;
-
-		@XmlTransient
-		public int age;
-
-		public TestBean3() {
-
-		}
-
-		public TestBean3(long id, String name, int age) {
-			this.id = id;
-			this.name = name;
-			this.age = age;
-		}
-
-	}
 
 	/**
 	 * 更新一個已存在Bean，JSON字符串裡只含有Bean的部分屬性，只覆蓋这部分的屬性.

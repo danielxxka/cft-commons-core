@@ -31,7 +31,8 @@ public class HttpClientUtils {
 
 	public static String httpGet(String url, int cTimeout, int sTimeout) throws IOException {
 
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(sTimeout).setConnectTimeout(cTimeout).build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(sTimeout).setConnectTimeout(cTimeout)
+				.build();
 		CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
 
 		CloseableHttpResponse response = null;
@@ -55,8 +56,11 @@ public class HttpClientUtils {
 		} catch (Exception ex) {
 			logger.error("Exception during Http Get: ", ex);
 		} finally {
-			response.close();
-			httpClient.close();
+			try {
+				httpClient.close();
+			} catch (IOException e) {
+				logger.error("httpclient close fail", e);
+			}
 		}
 
 		return responseBody;
@@ -65,7 +69,8 @@ public class HttpClientUtils {
 	public static String httpPost(Map<String, String> nvpMap, String url, int cTimeout, int sTimeout)
 			throws IOException {
 
-		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(sTimeout).setConnectTimeout(cTimeout).build();
+		RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(sTimeout).setConnectTimeout(cTimeout)
+				.build();
 		CloseableHttpClient httpClient = HttpClientBuilder.create().setDefaultRequestConfig(requestConfig).build();
 
 		CloseableHttpResponse response = null;
@@ -101,8 +106,11 @@ public class HttpClientUtils {
 		} catch (Exception ex) {
 			logger.error("Exception during Http Post: ", ex);
 		} finally {
-			response.close();
-			httpClient.close();
+			try {
+				httpClient.close();
+			} catch (IOException e) {
+				logger.error("httpclient close fail", e);
+			}
 		}
 
 		return responseBody;
