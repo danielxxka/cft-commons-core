@@ -1,11 +1,13 @@
 package cft.commons.core.util;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 /**
  * 常用日历操作辅助类
@@ -84,9 +86,19 @@ public class CalendarUtils {
 		return calendar.getTime();
 	}
 
-	public static String convertDateToString(Date dateTime) {
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		return df.format(dateTime);
+	/**
+	 * Date 与 String 转换
+	 * 
+	 */
+	public static String dateToStr(Date date ,String dateFormat) {
+		SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+		return df.format(date);
+	}
+	
+	public static Date strToDate(String strDate ,String dateFormat) throws ParseException {
+		SimpleDateFormat df = new SimpleDateFormat(dateFormat);
+		Date strtodate = df.parse(strDate);
+		return strtodate;
 	}
 
 	/**
@@ -110,29 +122,17 @@ public class CalendarUtils {
 	 * 
 	 * @param sdate
 	 * @return
+	 * @throws ParseException 
 	 */
-	public static String getWeek(String sdate) {
+	public static String getWeek(String sdate , String dateFormat) throws ParseException {
 		// 再转换为时间
-		Date date = CalendarUtils.strToDate(sdate);
+		Date date = CalendarUtils.strToDate(sdate ,dateFormat);
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		// int hour=c.get(Calendar.DAY_OF_WEEK);
 		// hour中存的就是星期几了，其范围 1~7
 		// 1=星期日 7=星期六，其他类推
 		return new SimpleDateFormat("EEEE").format(c.getTime());
-	}
-
-	/**
-	 * 将短时间格式字符串转换为时间 yyyy-MM-dd
-	 * 
-	 * @param strDate
-	 * @return
-	 */
-	public static Date strToDate(String strDate) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		ParsePosition pos = new ParsePosition(0);
-		Date strtodate = formatter.parse(strDate, pos);
-		return strtodate;
 	}
 
 	/**
@@ -575,4 +575,34 @@ public class CalendarUtils {
 	public boolean isLeapYear(int year) {
 		return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 	}
+	
+	/**
+	 * 根据TimeZone转换日期
+	 */
+	public static Date convertDateByTimeZone(Date sourceDate,TimeZone sourceZone,TimeZone targetZone){
+		Date convertDate = null;
+		if(sourceDate != null){
+			int timeOffset = sourceZone.getRawOffset() - targetZone.getRawOffset();
+			convertDate = new Date(sourceDate.getTime() - timeOffset);
+		}
+		return convertDate;
+	}
+	
+	public static String convertDateStrByTimeZone(String dataStr, String sourceZoneId, String sourceFormat, String targetZoneId,
+			String targeteFormat) throws ParseException {
+
+		SimpleDateFormat sourceSDF = new SimpleDateFormat(sourceFormat);
+		TimeZone sourceTimeZone = TimeZone.getTimeZone(sourceZoneId);
+		sourceSDF.setTimeZone(sourceTimeZone);
+		Date sourceDate = sourceSDF.parse(dataStr);
+
+		//开始转化时区：根据目标时区id设置目标TimeZone
+		TimeZone targetTimeZone = TimeZone.getTimeZone(targetZoneId);
+		SimpleDateFormat targetSDF = new SimpleDateFormat(targeteFormat);
+		targetSDF.setTimeZone(targetTimeZone);
+		
+		//得到目标时间字符串
+		return targetSDF.format(sourceDate);
+	}
+	
 }

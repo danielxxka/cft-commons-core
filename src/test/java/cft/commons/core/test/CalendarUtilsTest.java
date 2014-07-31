@@ -1,6 +1,8 @@
 package cft.commons.core.test;
 
+import java.text.ParseException;
 import java.util.Date;
+import java.util.TimeZone;
 
 import cft.commons.core.constant.Constants;
 import cft.commons.core.util.CalendarUtils;
@@ -44,7 +46,15 @@ public class CalendarUtilsTest {
 
 		System.out.println("获得今天在本月的第几天(获得当前日)：" + tt.getDayOfMonth());
 		System.out.println("获得今天在本周的第几天：" + tt.getDayOfWeek());
-		System.out.println("获得半年后的日期：" + tt.convertDateToString(tt.getTimeYearNext()));
+		System.out.println("获得半年后的日期：" + tt.dateToStr(tt.getTimeYearNext(),Constants.C_DATETIME_PATTERN_DEFAULT));
 		System.out.println("此日期距现在：" + tt.calculateDateDiff(new Date(System.currentTimeMillis() - 1800000)));
+		System.out.println("转换本地时间 to UTC 相对时间：" +CalendarUtils.convertDateByTimeZone(new Date(),TimeZone.getDefault(),TimeZone.getTimeZone("UTC")));
+		try {
+			System.out.println("转换本地时间字符串 to UTC 时间字符串：" +CalendarUtils.convertDateStrByTimeZone("2014-07-31 19:00:02","Asia/ShangHai",Constants.C_DATETIME_PATTERN_DEFAULT,"UTC","yyyy-MM-dd'T'HH:mm:ss zzz"));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 }
