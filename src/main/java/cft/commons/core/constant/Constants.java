@@ -52,5 +52,7 @@ public class Constants {
 	public static final long C_ONE_YEAR = C_ONE_DAY * 365;
 
 	public static final String ENCODING_UTF8 = "UTF-8";
-
+	public static final String ENCODING_GBK = "GBK";
+	public static final String ENCODING_BIG5 = "BIG5";
+	
 }

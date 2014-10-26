@@ -4,7 +4,6 @@ package cft.commons.core.util;
  * @author daniel
  *
  */
-import java.io.UnsupportedEncodingException;
 
 public class UnicodeUtils {
 
