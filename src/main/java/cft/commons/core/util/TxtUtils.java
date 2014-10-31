@@ -23,15 +23,14 @@ public class TxtUtils {
 	
 	/**
 	 * 读取txt file 返回List<String>
-	 * @param filePath 文件路径
+	 * @param file 文件
 	 * @param encoding 编码，默认为 GBK
 	 * @return
 	 */
-	public static List<String> readTxt(String filePath, String encoding) {
+	public static List<String> readTxt(File file, String encoding) {
 		
 		List<String> list = new ArrayList<String>();
 
-		File file = new File(filePath);
 		encoding = StringUtils.isNotBlank(encoding)?encoding:Constants.ENCODING_GBK;
 		
 
@@ -51,6 +50,27 @@ public class TxtUtils {
 		} catch (Exception e) {
 			logger.error("Exception during TxtUtils.readTxt.", e);
 		}
+
+		return list;
+
+	}
+	
+	
+	
+	
+	/**
+	 * 读取txt file 返回List<String>
+	 * @param filePath 文件路径
+	 * @param encoding 编码，默认为 GBK
+	 * @return
+	 */
+	public static List<String> readTxt(String filePath, String encoding) {
+		
+		List<String> list = new ArrayList<String>();
+
+		File file = new File(filePath);
+		
+		list = readTxt(file, encoding);
 
 		return list;
 

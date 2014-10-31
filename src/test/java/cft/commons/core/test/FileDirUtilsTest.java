@@ -25,7 +25,7 @@ public class FileDirUtilsTest {
 	@Order(order = 1)
 	public void testCopyURLToFile() throws Exception {
 
-		URL url = new URL("http://img.tvb.com/homepage/tvb_logo_day.gif");
+		URL url = new URL("http://www.baidu.com/img/bd_logo1.png");
 
 		url.openConnection().setConnectTimeout(1000);
 		url.openConnection().setReadTimeout(2000);
