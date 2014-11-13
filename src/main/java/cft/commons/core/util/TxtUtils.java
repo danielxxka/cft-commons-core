@@ -24,14 +24,14 @@ public class TxtUtils {
 	/**
 	 * 读取txt file 返回List<String>
 	 * @param file 文件
-	 * @param encoding 编码，默认为 GBK
+	 * @param encoding 编码，默认为 UTF-8
 	 * @return
 	 */
 	public static List<String> readTxt(File file, String encoding) {
 		
 		List<String> list = new ArrayList<String>();
 
-		encoding = StringUtils.isNotBlank(encoding)?encoding:Constants.ENCODING_GBK;
+		encoding = StringUtils.isNotBlank(encoding)?encoding:Constants.ENCODING_UTF8;
 		
 
 		try {
