@@ -23,17 +23,17 @@ public class FileDirUtilsTest {
 
 	@Test
 	@Order(order = 1)
-	public void testCopyURLToFile() throws Exception {
-
-		URL url = new URL("http://www.baidu.com/img/bd_logo1.png");
-
-		url.openConnection().setConnectTimeout(1000);
-		url.openConnection().setReadTimeout(2000);
-
-		FileUtils.forceMkdir(new File("/test1"));
+	public void testCopyURLToFile() {
 		try {
+			URL url = new URL("http://www.baidu.com/img/bd_logo1.png");
+
+			url.openConnection().setConnectTimeout(1000);
+			url.openConnection().setReadTimeout(2000);
+
+			FileUtils.forceMkdir(new File("/test1"));
+
 			FileUtils.copyURLToFile(url, new File("/test1/mde_gogogo.png"));
-		} catch (SocketException ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
@@ -47,7 +47,7 @@ public class FileDirUtilsTest {
 		System.out.println(FileUtils.isFileNewer(new File("/test1/mde_gogogo.png"), new Date().getTime() - 3600));
 
 		FileUtils.deleteQuietly(new File("/test1/mde_gogogo2.png"));
-		//FileUtils.forceDelete(new File("/test1"));
+		// FileUtils.forceDelete(new File("/test1"));
 
 		System.out.println("dir size = " + FileUtils.sizeOfDirectory(new File("/test1")));
 

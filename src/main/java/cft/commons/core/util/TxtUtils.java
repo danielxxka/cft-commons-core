@@ -3,7 +3,11 @@ package cft.commons.core.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,21 +22,23 @@ import cft.commons.core.constant.Constants;
  *
  */
 public class TxtUtils {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(TxtUtils.class);
-	
+
 	/**
 	 * 读取txt file 返回List<String>
-	 * @param file 文件
-	 * @param encoding 编码，默认为 UTF-8
+	 * 
+	 * @param file
+	 *            文件
+	 * @param encoding
+	 *            编码，默认为 UTF-8
 	 * @return
 	 */
 	public static List<String> readTxt(File file, String encoding) {
-		
+
 		List<String> list = new ArrayList<String>();
 
-		encoding = StringUtils.isNotBlank(encoding)?encoding:Constants.ENCODING_UTF8;
-		
+		encoding = StringUtils.isNotBlank(encoding) ? encoding : Constants.ENCODING_UTF8;
 
 		try {
 
@@ -44,7 +50,7 @@ public class TxtUtils {
 			while ((lineTxt = bufferedReader.readLine()) != null) {
 				list.add(lineTxt);
 			}
-			
+
 			read.close();
 
 		} catch (Exception e) {
@@ -54,26 +60,58 @@ public class TxtUtils {
 		return list;
 
 	}
-	
-	
-	
-	
+
 	/**
 	 * 读取txt file 返回List<String>
-	 * @param filePath 文件路径
-	 * @param encoding 编码，默认为 GBK
+	 * 
+	 * @param filePath
+	 *            文件路径
+	 * @param encoding
+	 *            编码，默认为 UTF8
 	 * @return
 	 */
 	public static List<String> readTxt(String filePath, String encoding) {
-		
+
 		List<String> list = new ArrayList<String>();
 
 		File file = new File(filePath);
-		
+
 		list = readTxt(file, encoding);
 
 		return list;
 
+	}
+
+	/**
+	 * 
+	 * @param filepath
+	 * @param fileEncode
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 */
+	public static void ANSI2UTF8(String orgFilepath, String orgFileEncode) throws UnsupportedEncodingException,
+			IOException {
+		BufferedReader buf = null;
+		OutputStreamWriter pw = null;
+		String str = null;
+		String allstr = "";
+
+		// 用于输入换行符的字节码
+		byte[] c = new byte[2];
+		c[0] = 0x0d;
+		c[1] = 0x0a;
+		String t = new String(c);
+
+		buf = new BufferedReader(new InputStreamReader(new FileInputStream(orgFilepath), orgFileEncode));
+		while ((str = buf.readLine()) != null) {
+			allstr = allstr + str + t;
+		}
+
+		buf.close();
+
+		pw = new OutputStreamWriter(new FileOutputStream(orgFilepath), Constants.ENCODING_UTF8);
+		pw.write(allstr);
+		pw.close();
 	}
 
 }
