@@ -1,6 +1,6 @@
 package cft.commons.core.helper.pattern.cor;
 
-
+ 
 /**
  * 节点处理器
  * 

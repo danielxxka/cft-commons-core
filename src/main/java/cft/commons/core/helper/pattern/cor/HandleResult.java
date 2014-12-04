@@ -1,5 +1,5 @@
 package cft.commons.core.helper.pattern.cor;
-
+ 
 /**
  * 
  * @author daniel

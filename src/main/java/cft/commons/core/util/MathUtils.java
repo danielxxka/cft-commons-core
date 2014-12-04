@@ -1,6 +1,7 @@
 package cft.commons.core.util;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author daniel
@@ -77,6 +78,24 @@ public class MathUtils {
 		BigDecimal b1 = new BigDecimal(v1.toString());
 		BigDecimal b2 = new BigDecimal(v2.toString());
 		return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+	}
+
+	/**
+	 * 计算平均值
+	 * 
+	 * @param list
+	 * @param N
+	 * @return
+	 */
+	public static Double avg(List<Double> list, Double N, int scale) {
+
+		double total = 0;
+
+		for (Double value : list) {
+			total += value;
+		}
+
+		return MathUtils.div(total, N, scale);
 	}
 
 }
