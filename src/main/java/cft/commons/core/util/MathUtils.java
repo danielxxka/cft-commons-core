@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class MathUtils {
 
-	private static final int DEF_DIV_SCALE = 4;
+	private static final int DEF_DIV_SCALE = 6;
 
 	/**
 	 * 两个Double数相加
